@@ -17,20 +17,19 @@ echo "-- Stopping..."
 systemctl stop unifi-protect
 echo "---- OK!"
 
-# Disable autostart on boot/reboot
 echo "-- Disabling..."
-systemctl -q disable unifi-protect >/dev/null 2>/dev/null
+systemctl disable unifi-protect
 echo "---- OK!"
 
 #
-# 2. Samba
+# 2. Install
 #
 echo
-echo "Step 2. Install Samba"
+echo "Step 2. Samba"
 
-# Install Samba
+# Install Samba (to serve up the NAS).
 echo "-- Installing..."
-apt-get install samba >/dev/null 2>/dev/null
+apt-get install samba -Y >/dev/null 2>/dev/null
 echo "---- OK!"
 
 # Start the samba service
@@ -95,12 +94,12 @@ echo "---- OK!"
 echo
 echo "Step 4. Auth"
 
-# Create a user
+# Create a linux user
 echo "-- Adding user..."
 adduser -q unasamba >/dev/null 2>/dev/null
 echo "---- OK!"
 
-# Create a user group
+# Create a linux user group
 echo "-- Adding usergroup..."
 addgroup -q unasmbgrp >/dev/null 2>/dev/null
 echo "---- OK!"
@@ -110,7 +109,7 @@ echo "-- Adding user to usergroup..."
 adduser -q unasamba unasmbgrp >/dev/null 2>/dev/null
 echo "---- OK!"
 
-# Create a Samba password
+# Create a password
 echo "-- Adding user password..."
 echo -e "unasamba\nunasamba" | smbpasswd -a -s unasamba
 echo "---- OK!"
@@ -128,25 +127,24 @@ echo "-- Creating directories..."
 [ -d /volume1/Samba/Protected ] || mkdir /volume1/Samba/Protected
 echo "---- OK!"
 
-# Set the permissions on the new directories
+# Set the permissions on the directories
 echo "-- Setting permissions..."
 chmod -R ugo+w /volume1/Samba/Public
 chmod -R 0770 /volume1/Samba/Protected
 chown root:unasmbgrp /volume1/Samba/Protected
 echo "---- OK!"
 
-# Restart Samba so changes take effect
-echo "-- Restarting Samba..."
+# Restart the smb service
+echo "-- Restarting samba..."
 service smbd restart
+systemctl daemon-reload
 echo "---- OK!"
 
-# Output protected auth
 echo
 echo "-- Access a Protected directory:"
 echo "---- U: unasamba"
 echo "---- P: unasamba"
 
-# Done
 echo
 echo "All done!"
 echo
