@@ -19,6 +19,11 @@ echo "---- OK!"
 
 echo "-- Disabling..."
 systemctl disable unifi-protect
+systemctl mask unifi-protect
+echo "---- OK!"
+
+echo "-- Removing..."
+apt-get remove unifi-protect -y
 echo "---- OK!"
 
 #
@@ -29,7 +34,7 @@ echo "Step 2. Samba"
 
 # Install Samba (to serve up the NAS).
 echo "-- Installing..."
-apt-get install samba -Y >/dev/null 2>/dev/null
+apt-get install samba -y >/dev/null 2>/dev/null
 echo "---- OK!"
 
 # Start the samba service
