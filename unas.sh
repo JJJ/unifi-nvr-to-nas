@@ -14,12 +14,12 @@ echo "Step 1. Protect"
 
 # Stop it
 echo "-- Stopping..."
-systemctl stop unifi-protect
+systemctl stop unifi-protect >/dev/null 2>/dev/null
 echo "---- OK!"
 
 echo "-- Disabling..."
-systemctl disable unifi-protect
-systemctl mask unifi-protect
+systemctl disable unifi-protect >/dev/null 2>/dev/null
+systemctl mask unifi-protect >/dev/null 2>/dev/null
 echo "---- OK!"
 
 echo "-- Removing..."
